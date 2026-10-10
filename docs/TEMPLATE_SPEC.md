@@ -10,7 +10,7 @@
 
 A cinematic SaaS landing page for a fictional product, **BloomOS** ("Make work bloom."):
 
-1. **Hero:** full-screen artwork of a retro computer in a sunset mountain meadow. The first time the pointer moves over the right side of the scene, a 3-second growth video starts. It opens as a soft circle from the pointer, expands to full screen in 0.8 s, and then the whole garden blooms (vines, flowers, butterflies, and the screen lights up with the BloomOS UI). The final frame holds until "Reset garden".
+1. **Hero:** full-screen artwork of a retro computer in a sunset mountain meadow. Wherever the pointer moves, a soft-edged spotlight reveals the blooming garden from a 3-second growth video (vines, flowers, butterflies, the screen lighting up with the BloomOS UI). Revealed areas stay revealed until "Reset garden".
 2. **Foreground occlusion:** the computer, vines, flowers and butterflies pass *in front of* the giant headline "MAKE WORK BLOOM.", while the tagline and buttons stay on top.
 3. **A small site behind it:** Product, Solutions, Pricing, Log in, a 3-step Sign-up/onboarding flow, and a full-page demo Workspace. All of it is local only (localStorage); there is no backend.
 
@@ -77,7 +77,7 @@ Keep class names identical so the CSS applies unchanged.
 | z | Layer | Notes |
 |---|---|---|
 | 0 | `<img.start-frame>` bloom-start-v2.webp | `object-fit:cover`, see 5.2 |
-| 0 | `<video#garden-video>` | same box as the image; `opacity:0` until playing; radial CSS mask during the entrance |
+| 0 | `<video#garden-video>` | same box as the image; `opacity:0` until playing; inline mask-image from the spotlight mask canvas |
 | 3 | `.scene-shade` | subtle left gradient |
 | 6 | `<h1>` headline | sits **behind** the occluder |
 | 7 | `canvas#occluder` (WebGL) | redraws computer + plants above the headline, see 5.5 |
@@ -95,23 +95,16 @@ The artwork is 1920×1080 and always `object-fit:cover`:
 
 `app.js → layout()` mirrors these numbers in JS; keep both in sync.
 
-### 5.3 State machine
+### 5.3 Cursor spotlight reveal
 
-```
-idle ──pointer moves over right 70% of artwork (source x ≥ 576px)──▶ entrance
-idle ──touch / keyboard focus on computer / "Watch demo"──────────▶ entrance
-entrance (0 → 0.8 s of video time):
-    video plays from t=0, opacity 1, CSS radial mask centred on the first pointer position
-    radius = 150px + diagonal × (t/0.8)^1.4, soft edge 65 px
-    updated on requestVideoFrameCallback (rAF fallback)
-open (t ≥ 0.8 s): mask removed (.garden-open); the whole garden keeps playing even if the pointer leaves
-ended: final frame stays visible; "Reset garden" pill appears bottom-right
-reset: pause, currentTime = 0, back to idle
-```
-- The video is `muted playsinline preload="auto"` and plays only once per reset. Later pointer moves do **not** restart it.
-- `prefers-reduced-motion`: no playback; seek to the last frame (duration − 0.04 s) and show it.
-- Tab hidden: pause; visible again: resume if mid-play.
-- Leaving `#/` pauses the video; returning resumes it if it was playing.
+The bloom is revealed **only where the pointer moves**, through a persistent, soft-edged brush mask:
+
+- A mask canvas in media-plane space (400 px wide, height by aspect) holds white with alpha. Every animation frame while the pointer is over the hero, a radial-gradient stamp is drawn at the **smoothed** pointer position (ease ≈ 0.12 per frame): radius 230 CSS px (140 on mobile), alpha stops 0 → 1×, 0.35 → 0.9×, 0.65 → 0.45×, 0.85 → 0.12×, 1 → 0, strength 0.16 per frame. Lingering makes a spot fully opaque; quick passes leave a faint, soft reveal.
+- The mask is applied to the `<video>` as an inline `mask-image: url(<canvas dataURL>)` with `mask-size: 100% 100%`, and uploaded as a texture to the occluder (5.5), which samples it at the same plane position.
+- The video starts on the first stroke, plays once (3 s) and holds its last frame. Revealed areas persist while the pointer is over the hero.
+- **Auto-sleep:** 350 ms after the pointer leaves the hero, the reveal fades out over 1.4 s (smoothstep on a snapshot of the mask, time-based, not frame-based); then the video is paused and rewound to frame 0, so the next hover grows the garden again. Re-entering during the fade cancels it. Touch and "Watch demo" fade out 2.2 s after they end. "Reset garden" does the same instantly.
+- "Watch demo" resets, then paints an automatic 2.6 s stroke over the computer. Touch drags paint; keyboard focus paints at the computer. Reduced motion: stamps at full strength, video seeks to the last frame.
+- Tab hidden: pause; leaving `#/` pauses, returning resumes.
 
 ### 5.4 Hero copy (verbatim)
 
@@ -127,8 +120,7 @@ A transparent `<canvas id="occluder" width=1920 height=1080>` placed exactly lik
 
 Each frame it draws whatever the artwork currently shows:
 - **mode 0** (idle): the start image
-- **mode 1** (entrance): mix start image → video frame using the same radial mask (centre and radius in plane pixels, soft edge 65 px)
-- **mode 2** (open/ended): the video frame
+- **mode 1** (revealing): mix start image → video frame by the spotlight mask texture (`uMask`, sampled at plane px / plane size)
 
 It keeps only the computer and plants:
 ```glsl
@@ -179,9 +171,9 @@ Wrap every storage access in try/catch. The UI must still work when storage is b
 **Hero**
 - [ ] Idle hero matches `docs/reference/01-hero-start.jpg` at 1440×900 (headline size, condensed width, positions, header).
 - [ ] The "K" in WORK is partly covered by the monitor corner and vines; tagline and buttons are never covered.
-- [ ] First pointer move over the right side starts a circular reveal from the pointer, which fills the screen in about 0.8 s.
-- [ ] The garden finishes on its own after the pointer leaves; the final frame holds (`docs/reference/03`), flowers and butterflies stay in front of the headline.
-- [ ] Moving again does not restart it; "Reset garden" returns to idle; "Watch demo" replays from the computer.
+- [ ] Moving the pointer reveals the bloom only along its path, with soft, feathered edges; lingering makes a spot fully revealed.
+- [ ] Revealed areas stay revealed; flowers there pass in front of the headline.
+- [ ] "Reset garden" clears the reveal; "Watch demo" paints an automatic stroke over the computer.
 - [ ] Reduced motion shows the final frame without playback; no console errors.
 
 **Pages**

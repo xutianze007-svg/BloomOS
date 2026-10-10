@@ -52,10 +52,11 @@ condensed Bodoni headline (scaleX + width compensation, cqw sizes) must match ex
 Port the hero logic from app.js (everything above the "Foreground occlusion" section) into a
 useGardenHero() hook inside <Hero/>, line by line:
 - layout()/sourcePoint()/artworkPoint() mirror the CSS cover framing (62% / 68% / mobile).
-- First pointer move over the artwork where source x ≥ 30% starts the video once; the
-  entrance is a CSS radial mask on the video (--reveal-x/y/radius) driven by
-  requestVideoFrameCallback: radius = 150 + diagonal*(t/0.8)^1.4; at t ≥ 0.8s add .garden-open.
-- Classes on #hero: has-explored, is-revealing, garden-playing, garden-open.
+- Cursor spotlight (spec 5.3): a 400px-wide mask canvas in plane space; each frame while
+  hovering, stamp a soft radial gradient (radius 230px, strength 0.16) at the smoothed pointer;
+  apply it to the video as inline mask-image (dataURL, mask-size 100% 100%). The video starts on
+  the first stroke, plays once and holds the last frame; revealed areas persist until Reset.
+- Classes on #hero: has-explored, is-revealing, garden-playing.
 - Touch, keyboard focus on .bloom-trigger, and Watch demo also start it; Reset garden resets.
 - prefers-reduced-motion: seek to the last frame instead of playing.
 - Pause when the tab is hidden, and when leaving #/; resume when coming back if it was mid-play.
@@ -67,7 +68,7 @@ useGardenHero() hook inside <Hero/>, line by line:
 ```
 Port the "Foreground occlusion" IIFE from app.js into useOccluder(), unchanged:
 a WebGL canvas (1920×1080, premultipliedAlpha) above the h1 that redraws the start image
-(mode 0), the start→video radial mix (mode 1) or the video frame (mode 2), keys out the blue
+(mode 0) or the start→video mix by the spotlight mask texture (mode 1), keys out the blue
 sky with the exact shader in the spec, and multiplies by occlusion-domain.png.
 Upload the video texture on every requestVideoFrameCallback while playing and on
 seeked/ended/pause. Re-render when #hero's class changes and on resize. Only the h1 goes
