@@ -1,6 +1,6 @@
 # BloomOS — Make work bloom
 
-A cinematic SaaS landing-page template. Move the cursor over the scene and a retro computer in a sunset meadow bursts into bloom, while the vines and flowers grow **in front of** the headline. Behind the hero is a small working site: Product, Solutions, Pricing, Log in, a 3-step sign-up, and a demo workspace.
+A cinematic SaaS landing-page template. Move the cursor over the scene and a soft spotlight reveals a retro computer in a sunset meadow bursting into bloom, only where you move, while the vines and flowers grow **in front of** the headline. Behind the hero is a small working site: Product, Solutions, Pricing, Log in, a 3-step sign-up, and a demo workspace.
 
 Plain HTML/CSS/JavaScript with no dependencies or build step.
 
@@ -17,7 +17,7 @@ Any static server works. Media must be served from the same origin, because the 
 
 ## Highlights
 
-- **Hover-to-bloom hero:** one 3-second video. It opens as a soft circle from the first pointer position, fills the screen in 0.8 s, then the whole garden grows on its own and holds the final frame (`app.js`).
+- **Cursor spotlight reveal:** a persistent, soft-edged brush mask follows the pointer and reveals a 3-second bloom video only where you move (`app.js`).
 - **Foreground occlusion:** a WebGL canvas redraws the computer and plants above the `<h1>`, keying out the sky inside a soft mask (`assets/media/occlusion-domain.png`). The tagline and buttons always stay on top.
 - **Site pages:** hash routes `#/product`, `#/solutions`, `#/pricing`, `#/login`, `#/signup`, `#/workspace` (`pages.js`, `pages.css`).
 - **Demo account flow:** plan and template choices carry into sign-up; onboarding sets the workspace name, accent and starter tasks. Everything stays in `localStorage`.
