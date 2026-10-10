@@ -33,7 +33,8 @@ BloomOS/   (repository root = the working reference build; open with any static 
       └─ media/
          ├─ bloom-start-v2.webp       1920×1080, the first video frame (hero base image)
          ├─ bloom-end-v2.webp         1920×1080, the final video frame (Product hero, auth art, CTA bands)
-         ├─ bloom-growth-repaired.mp4 1920×1080, 24 fps, 3.04 s, H.264, no audio (≈4.3 MB)
+         ├─ bloom-forward.mp4         1920×1080, 24 fps, 3.04 s, H.264, keyframe every 4 frames (≈6.3 MB)
+         ├─ bloom-reverse.mp4         the same clip reversed (≈6.2 MB)
          └─ occlusion-domain.png      960×540 grayscale, the soft area where the occluder may cover the headline
 ```
 
@@ -66,6 +67,8 @@ Keep class names identical so the CSS applies unchanged.
 | Hero bg fallback | `#225b70` | body background behind the artwork |
 | Accent options (onboarding) | peach `#f1b48f`, sage `#a9bf92`, butter `#f0cf73`, rose `#e7a3a8` | workspace accent |
 
+**Icons:** Lucide (ISC licence), inlined in `icons.js`; markup uses `<i data-icon="name"></i>`, replaced on load and for dynamically added nodes. Do not substitute emoji or unicode symbols.
+
 **Fonts:** *Bodoni Moda* (variable, served locally, weight 900, `opsz` axis) for the display headline and page titles; *Inter* for everything else. Do not substitute Playfair, Didot or system serif.
 
 **Hero headline:** two lines, "MAKE WORK" / "BLOOM.", Bodoni Moda 900, horizontally **condensed with `transform: scaleX(...)`** and a compensating `width` (e.g. `scaleX(.49)` + `width:204.08%` at desktop). Size is in container units (`cqw`) of `.scene`. Copy these rules exactly from `styles.css`; this condensed look is the signature of the page.
@@ -77,7 +80,7 @@ Keep class names identical so the CSS applies unchanged.
 | z | Layer | Notes |
 |---|---|---|
 | 0 | `<img.start-frame>` bloom-start-v2.webp | `object-fit:cover`, see 5.2 |
-| 0 | `<video#garden-video>` | same box as the image; `opacity:0` until playing; inline mask-image from the spotlight mask canvas |
+| 0 | `<video#garden-video>` + cloned reverse `<video>` | same box as the image; the visible one has `opacity:1`; inline radial mask-image (5.3) |
 | 3 | `.scene-shade` | subtle left gradient |
 | 6 | `<h1>` headline | sits **behind** the occluder |
 | 7 | `canvas#occluder` (WebGL) | redraws computer + plants above the headline, see 5.5 |
@@ -95,16 +98,12 @@ The artwork is 1920×1080 and always `object-fit:cover`:
 
 `app.js → layout()` mirrors these numbers in JS; keep both in sync.
 
-### 5.3 Cursor spotlight reveal
+### 5.3 Hover bloom (source of truth: app.js)
 
-The bloom is revealed **only where the pointer moves**, through a persistent, soft-edged brush mask:
-
-- A mask canvas in media-plane space (400 px wide, height by aspect) holds white with alpha. Every animation frame while the pointer is over the hero, a radial-gradient stamp is drawn at the **smoothed** pointer position (ease ≈ 0.12 per frame): radius 230 CSS px (140 on mobile), alpha stops 0 → 1×, 0.35 → 0.9×, 0.65 → 0.45×, 0.85 → 0.12×, 1 → 0, strength 0.16 per frame. Lingering makes a spot fully opaque; quick passes leave a faint, soft reveal.
-- The mask is applied to the `<video>` as an inline `mask-image: url(<canvas dataURL>)` with `mask-size: 100% 100%`, and uploaded as a texture to the occluder (5.5), which samples it at the same plane position.
-- The video starts on the first stroke, plays once (3 s) and holds its last frame. Revealed areas persist while the pointer is over the hero.
-- **Auto-sleep:** 350 ms after the pointer leaves the hero, the reveal fades out over 1.4 s (smoothstep on a snapshot of the mask, time-based, not frame-based); then the video is paused and rewound to frame 0, so the next hover grows the garden again. Re-entering during the fade cancels it. Touch and "Watch demo" fade out 2.2 s after they end. "Reset garden" does the same instantly.
-- "Watch demo" resets, then paints an automatic 2.6 s stroke over the computer. Touch drags paint; keyboard focus paints at the computer. Reduced motion: stamps at full strength, video seeks to the last frame.
-- Tab hidden: pause; leaving `#/` pauses, returning resumes.
+- **Trigger area = the computer core** (monitor + base), source rect x 990–1625, y 265–850. Entering it starts the bloom; leaving it starts the rewind **immediately** (no delay). Leaving the whole hero also rewinds.
+- **Native video, two copies:** `bloom-forward.mp4` and `bloom-reverse.mp4` (pre-reversed, keyframe every 4 frames for instant seeks). Forward plays at 0.85×; on leave, the reverse copy is seeked to `duration − t` and plays at 1.25×, so the garden grows back smoothly to frame 0, then everything resets. Re-entering mid-rewind continues forward from the current moment.
+- **Directional reveal, one shared clock:** the video is shown through a CSS `radial-gradient` mask centred where the pointer first entered. Its radius grows with pointer travel (moving 50% of the artwork width opens everything; plus 18%/s while hovering still), so the bloom spreads in the direction you move. Feather = 32% of artwork width. Everything revealed shows the same video moment, so old and new flowers are never patched together.
+- "Watch demo": an automatic stroke over the computer, then rewinds. Reduced motion: jumps to the last frame / first frame.
 
 ### 5.4 Hero copy (verbatim)
 
@@ -116,23 +115,12 @@ The bloom is revealed **only where the pointer moves**, through a persistent, so
 
 ### 5.5 Foreground occluder (WebGL)
 
-A transparent `<canvas id="occluder" width=1920 height=1080>` placed exactly like the artwork (same cover/position), above the `<h1>`.
-
-Each frame it draws whatever the artwork currently shows:
-- **mode 0** (idle): the start image
-- **mode 1** (revealing): mix start image → video frame by the spotlight mask texture (`uMask`, sampled at plane px / plane size)
-
-It keeps only the computer and plants:
-```glsl
-float sky   = smoothstep(.06,.16, c.b - c.r) * smoothstep(.25,.40, c.b); // blue sky key
-float alpha = texture2D(uDomain, uv).r * (1.0 - sky);                    // limited to occlusion-domain.png
-gl_FragColor = vec4(c * alpha, alpha);                                    // premultiplied
-```
-- The video texture is re-uploaded on every `requestVideoFrameCallback` while playing, and on `seeked` / `ended` / `pause`.
-- If WebGL is unavailable, skip the occluder; the headline then simply renders on top.
-- The tagline and buttons must stay above it. Only the `<h1>` is occluded (achieved with `.hero-copy{z-index:auto}`, `h1{z-index:6}`, tagline/actions `z-index:9`).
-
-**Expected look:** idle, the monitor's top-left corner and its vines cover the right leg of the "K" in WORK. When bloomed, the flower crown covers more of "WORK" and butterflies fly in front of the letters (see `docs/reference/01` and `docs/reference/03`).
+A transparent `<canvas id="occluder" width=1920 height=1080>` above the `<h1>` redraws the current picture (start frame, or start frame mixed with the visible video through the same radial mask) and keeps only the computer and plants:
+- sky key: `sky = smoothstep(.02,.12,b−r) * smoothstep(.18,.34,b)`, alpha = `1 − sky`
+- **erode** the alpha by taking the minimum of 4 neighbours 1.5 px away, then `smoothstep(.4,.95,alpha)`, × `occlusion-domain.png`
+- **despill**: `b = min(b, max(r,g)*1.04)`, so no blue fringe shows against the cream letters
+- the video texture is re-uploaded on every `requestVideoFrameCallback` of the visible video
+Only the `<h1>` sits below it; tagline and buttons stay above.
 
 ## 6. Site pages (routes)
 

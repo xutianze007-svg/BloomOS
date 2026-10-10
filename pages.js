@@ -198,7 +198,7 @@ function renderTasks(){
   for(const task of visible.filter(t=>t.done===done)){
    const a=document.createElement('article');a.className='task';
    const top=document.createElement('div');top.className='task-top';
-   if(task.botanical){const s=document.createElement('span');s.className='botanical';s.textContent='⚘';s.setAttribute('aria-hidden','true');top.append(s);}
+   if(task.botanical){const s=document.createElement('span');s.className='botanical';s.innerHTML=window.icon?window.icon('sprout'):'';s.setAttribute('aria-hidden','true');top.append(s);}
    const text=document.createElement('div');
    const h=document.createElement('h5');h.textContent=task.title;
    const p=document.createElement('p');p.textContent=task.description;
@@ -206,7 +206,7 @@ function renderTasks(){
    text.append(h,p,tag);top.append(text);
    const bottom=document.createElement('div');bottom.className='task-bottom';
    const label=document.createElement('span');label.textContent=done?'Ready to bloom':'Room to grow';
-   const tg=document.createElement('button');tg.className='task-toggle';tg.textContent=done?'↶ Reopen':'✓ Complete';tg.setAttribute('aria-label',(done?'Reopen ':'Complete ')+task.title);
+   const tg=document.createElement('button');tg.className='task-toggle';tg.innerHTML=(window.icon?window.icon(done?'rotate-ccw':'check'):'')+(done?' Reopen':' Complete');tg.setAttribute('aria-label',(done?'Reopen ':'Complete ')+task.title);
    tg.addEventListener('click',()=>{task.done=!task.done;saveTasks();renderTasks();});
    bottom.append(label,tg);a.append(top,bottom);c.append(a);
   }
