@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#225b70">
+  <meta name="description" content="BloomOS — one workspace, from first thought to finished work. A little focus. A lot of possibility.">
+  <title>BloomOS — Make work bloom.</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/BodoniModa.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/Inter.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/media/bloom-start-v2.webp" as="image" fetchpriority="high">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="pages.css">
+  <script src="app.js" defer></script>
+  <script src="pages.js" defer></script>
+</head>
+<body data-route="home">
+  <header class="site-header" id="site-header">
+    <a class="wordmark" href="#/" aria-label="BloomOS home">BloomOS</a>
+    <nav class="desktop-nav" aria-label="Main navigation">
+      <a href="#/product" data-nav="product">Product</a><a href="#/solutions" data-nav="solutions">Solutions</a><a href="#/pricing" data-nav="pricing">Pricing</a>
+    </nav>
+    <div class="header-actions">
+      <a class="login guest-only" href="#/login" data-nav="login">Log in</a>
+      <a class="button cream small guest-only" href="#/signup">Get started <span aria-hidden="true">↗</span></a>
+      <a class="button cream small member-only" href="#/workspace">Open workspace <span aria-hidden="true">↗</span></a>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span></button>
+    </div>
+  </header>
+  <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation" hidden>
+    <a href="#/product">Product</a><a href="#/solutions">Solutions</a><a href="#/pricing">Pricing</a>
+    <a class="guest-only" href="#/login">Log in</a><a class="guest-only" href="#/signup">Get started</a><a class="member-only" href="#/workspace">Open workspace</a>
+  </nav>
+  <a class="skip" href="#bloom-trigger">Skip to the blooming computer</a>
+  <main class="hero" id="hero" data-page="home">
+    <div class="scene" id="scene">
+      <div class="media-plane" id="media-plane" aria-hidden="true">
+        <img class="scene-layer start-frame" src="assets/media/bloom-start-v2.webp" alt="" width="1920" height="1080" fetchpriority="high">
+        <video id="garden-video" class="scene-layer garden-video" src="assets/media/bloom-growth-repaired.mp4" muted playsinline preload="auto" disablepictureinpicture></video>
+      </div>
+      <div class="scene-shade" aria-hidden="true"></div>
+      <section class="hero-copy" aria-labelledby="hero-title">
+        <h1 id="hero-title"><span>MAKE WORK</span><span>BLOOM.</span></h1>
+        <p class="tagline">One workspace. From first<br class="desktop-break"> thought to finished work.</p>
+        <div class="hero-actions">
+          <a class="button cream primary" href="#/workspace">Try BloomOS <span aria-hidden="true">↗</span></a>
+          <button class="demo-link" id="watch-demo">Watch demo <span class="play-mark" aria-hidden="true">▷</span></button>
+        </div>
+      </section>
+      <div class="media-plane occluder-plane" aria-hidden="true"><canvas id="occluder" class="scene-layer occluder" width="1920" height="1080"></canvas></div>
+      <button class="bloom-trigger" id="bloom-trigger" aria-label="Wake the whole blooming garden." aria-describedby="bloom-status">
+        <span class="sr-only">Let it bloom</span>
+      </button>
+      <div class="hover-hint" aria-hidden="true">
+        <span class="hint-desktop">Move your cursor.<br>Let it bloom.</span>
+        <span class="hint-mobile">Touch to<br>discover.</span>
+        <svg viewBox="0 0 100 65" fill="none"><path d="M91 3C77 28 45 49 9 56" stroke="currentColor" stroke-width="1"/><circle cx="9" cy="56" r="2.5" fill="currentColor"/></svg>
+      </div>
+    </div>
+    <div class="bloom-cursor" id="bloom-cursor" aria-hidden="true"></div>
+    <footer class="hero-footer"><p class="signature"><span></span>Built for human possibility</p><button id="replay" class="replay" aria-label="Reset the garden to its sleeping state"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 7a6.5 6.5 0 1 1-.2 5M4 7V2M4 7h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Reset garden</span></button></footer>
+    <p id="bloom-status" class="sr-only" role="status">Move over the scene to reveal the blooming workspace, or focus the computer and press Enter.</p>
+  </main>
+  <!-- ═════════════ PRODUCT ═════════════ -->
+  <main class="page" id="page-product" data-page="product" hidden aria-labelledby="product-title">
+    <section class="page-hero wrap">
+      <div class="page-hero-copy">
+        <p class="eyebrow">Product</p>
+        <h1 class="page-title" id="product-title" tabindex="-1">Everything your work<br> needs to grow.</h1>
+        <p class="lede">Projects, notes and a gentle AI assistant in one calm workspace. Plant an idea, tend it with your team, and watch it become finished work.</p>
+        <div class="cta-row"><a class="button green" href="#/signup">Start for free <span aria-hidden="true">↗</span></a><a class="text-link" href="#/workspace">Try the live demo</a></div>
+      </div>
+      <figure class="hero-shot"><img src="assets/media/bloom-end-v2.webp" alt="The BloomOS workspace on a retro computer, surrounded by flowers." loading="lazy"></figure>
+    </section>
+
+    <section class="wrap section">
+      <div class="section-head"><p class="eyebrow">One workspace, four rooms</p><h2>Each part of your work has a place.</h2></div>
+      <div class="feature-tabs" data-tabs>
+        <div class="tab-list" role="tablist" aria-label="Product areas">
+          <button role="tab" aria-selected="true" aria-controls="ft-projects" id="ft-projects-tab"><b>Projects</b><span>Boards that move with you</span></button>
+          <button role="tab" aria-selected="false" aria-controls="ft-knowledge" id="ft-knowledge-tab" tabindex="-1"><b>Knowledge</b><span>Briefs, notes and references</span></button>
+          <button role="tab" aria-selected="false" aria-controls="ft-agents" id="ft-agents-tab" tabindex="-1"><b>Bloom assistant</b><span>Drafts plans from your notes</span></button>
+          <button role="tab" aria-selected="false" aria-controls="ft-focus" id="ft-focus-tab" tabindex="-1"><b>Focus</b><span>Quiet time for deep work</span></button>
+        </div>
+        <div class="tab-panels">
+          <div class="tab-panel" role="tabpanel" id="ft-projects" aria-labelledby="ft-projects-tab">
+            <div class="mock">
+              <div class="mock-head"><span>Spring launch</span><i class="pill">3 tasks</i></div>
+              <div class="mock-board"><div><h6><i class="dot butter"></i>In progress</h6><p class="mock-card">Brand direction<small>Design · Due Fri</small></p><p class="mock-card">Launch story<small>Draft</small></p></div><div><h6><i class="dot sage"></i>Ready to bloom</h6><p class="mock-card done">Research brief<small>Complete</small></p></div></div>
+            </div>
+            <p class="panel-copy">Drag work from idea to done on simple boards. Every project keeps its tasks, files and decisions together, so nothing wilts in a forgotten folder.</p>
+          </div>
+          <div class="tab-panel" role="tabpanel" id="ft-knowledge" aria-labelledby="ft-knowledge-tab" hidden>
+            <div class="mock">
+              <div class="mock-head"><span>Knowledge</span><i class="pill">12 notes</i></div>
+              <ul class="mock-list"><li><b>Brand voice</b><small>Warm, clear, a little poetic</small></li><li><b>Customer interviews</b><small>8 conversations · themes tagged</small></li><li><b>Launch checklist</b><small>Linked to Spring launch</small></li></ul>
+            </div>
+            <p class="panel-copy">Keep the thinking behind the work: briefs, research and references, linked straight to the projects that use them.</p>
+          </div>
+          <div class="tab-panel" role="tabpanel" id="ft-agents" aria-labelledby="ft-agents-tab" hidden>
+            <div class="mock">
+              <div class="mock-head"><span>✧ Bloom assistant</span><i class="pill">Sample</i></div>
+              <p class="mock-bubble you">Turn my interview notes into a launch plan.</p>
+              <p class="mock-bubble">Here’s a three-step plan: 1. Define the story from the top three themes. 2. Draft the campaign. 3. Review together on Thursday.</p>
+            </div>
+            <p class="panel-copy">Ask the assistant to summarise notes, draft plans or break a big goal into tasks. You stay in control of what gets added.</p>
+          </div>
+          <div class="tab-panel" role="tabpanel" id="ft-focus" aria-labelledby="ft-focus-tab" hidden>
+            <div class="mock mock-focus">
+              <span class="focus-ring"><b>25:00</b><small>Focus session</small></span>
+              <p>Notifications paused · Working on <b>Launch story</b></p>
+            </div>
+            <p class="panel-copy">Start a focus session on any task. BloomOS quiets everything else until you’re done.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap section">
+      <div class="section-head"><p class="eyebrow">How it works</p><h2>From first thought to finished work.</h2></div>
+      <ol class="steps">
+        <li><span class="step-num">01</span><h3>Plant</h3><p>Capture an idea in seconds: a note, a task or a whole project brief.</p></li>
+        <li><span class="step-num">02</span><h3>Tend</h3><p>Shape it with your team. Assign, comment, and let the assistant draft the next step.</p></li>
+        <li><span class="step-num">03</span><h3>Bloom</h3><p>Ship it, then keep what you learned in Knowledge for the next season.</p></li>
+      </ol>
+    </section>
+
+    <section class="wrap section">
+      <div class="section-head"><p class="eyebrow">Works with your tools</p><h2>Connect the places you already work.</h2></div>
+      <ul class="connect-grid"><li><span>◷</span>Calendar</li><li><span>✉</span>Email</li><li><span>▤</span>Docs</li><li><span>◫</span>Design files</li><li><span>☏</span>Team chat</li><li><span>⇪</span>File storage</li></ul>
+      <p class="fine">Integrations shown are concept categories for this preview.</p>
+    </section>
+
+    <section class="cta-band"><div class="wrap"><h2>Give your next idea room to grow.</h2><div class="cta-row"><a class="button cream" href="#/signup">Get started free <span aria-hidden="true">↗</span></a><a class="text-link light" href="#/pricing">See pricing</a></div></div></section>
+    <div data-footer></div>
+  </main>
+
+  <!-- ═════════════ SOLUTIONS ═════════════ -->
+  <main class="page" id="page-solutions" data-page="solutions" hidden aria-labelledby="solutions-title">
+    <section class="page-hero wrap narrow">
+      <div class="page-hero-copy">
+        <p class="eyebrow">Solutions</p>
+        <h1 class="page-title" id="solutions-title" tabindex="-1">Made for the way<br> your team grows.</h1>
+        <p class="lede">Start from a template shaped for your kind of work, then let it grow with you.</p>
+      </div>
+    </section>
+    <section class="wrap section tight">
+      <div class="solution-tabs" data-tabs>
+        <div class="tab-list chips" role="tablist" aria-label="Teams">
+          <button role="tab" aria-selected="true" aria-controls="sol-creative" id="sol-creative-tab">Creative studios</button>
+          <button role="tab" aria-selected="false" aria-controls="sol-product" id="sol-product-tab" tabindex="-1">Product teams</button>
+          <button role="tab" aria-selected="false" aria-controls="sol-marketing" id="sol-marketing-tab" tabindex="-1">Marketing</button>
+          <button role="tab" aria-selected="false" aria-controls="sol-founders" id="sol-founders-tab" tabindex="-1">Founders</button>
+        </div>
+        <div class="tab-panels">
+          <article class="tab-panel solution" role="tabpanel" id="sol-creative" aria-labelledby="sol-creative-tab">
+            <div><h2>Client work without the chaos.</h2><p>Keep every brief, moodboard and round of feedback beside the work itself.</p>
+              <ul class="checks"><li>Client portals for review and approvals</li><li>Moodboards linked to tasks</li><li>Feedback rounds that close themselves</li></ul>
+              <button class="button green" data-template="creative">Use this template <span aria-hidden="true">↗</span></button></div>
+            <div class="template-card"><p class="eyebrow">Template · Studio project</p><ol><li>Kick-off & brief</li><li>Moodboard</li><li>First concepts</li><li>Client review</li><li>Final delivery</li></ol></div>
+          </article>
+          <article class="tab-panel solution" role="tabpanel" id="sol-product" aria-labelledby="sol-product-tab" hidden>
+            <div><h2>From research to release.</h2><p>Connect what customers say to what you build next, in one living roadmap.</p>
+              <ul class="checks"><li>Interview notes tagged into themes</li><li>Roadmap boards by season</li><li>Release notes drafted by the assistant</li></ul>
+              <button class="button green" data-template="product">Use this template <span aria-hidden="true">↗</span></button></div>
+            <div class="template-card"><p class="eyebrow">Template · Product cycle</p><ol><li>Research synthesis</li><li>Opportunity map</li><li>Spec & design</li><li>Build & test</li><li>Release</li></ol></div>
+          </article>
+          <article class="tab-panel solution" role="tabpanel" id="sol-marketing" aria-labelledby="sol-marketing-tab" hidden>
+            <div><h2>Campaigns that bloom on time.</h2><p>Plan launches, content and channels on one calendar the whole team can see.</p>
+              <ul class="checks"><li>Content calendar with owners</li><li>Launch checklists you can reuse</li><li>Campaign briefs in Knowledge</li></ul>
+              <button class="button green" data-template="marketing">Use this template <span aria-hidden="true">↗</span></button></div>
+            <div class="template-card"><p class="eyebrow">Template · Launch campaign</p><ol><li>Campaign story</li><li>Channel plan</li><li>Content production</li><li>Launch day</li><li>Results review</li></ol></div>
+          </article>
+          <article class="tab-panel solution" role="tabpanel" id="sol-founders" aria-labelledby="sol-founders-tab" hidden>
+            <div><h2>One calm place to run it all.</h2><p>Goals, hiring, fundraising and product, without stitching together five tools.</p>
+              <ul class="checks"><li>Quarterly goals with simple progress</li><li>Investor and hiring pipelines</li><li>A weekly review the assistant prepares</li></ul>
+              <button class="button green" data-template="founders">Use this template <span aria-hidden="true">↗</span></button></div>
+            <div class="template-card"><p class="eyebrow">Template · Company garden</p><ol><li>Quarterly goals</li><li>Product priorities</li><li>Hiring pipeline</li><li>Fundraising</li><li>Weekly review</li></ol></div>
+          </article>
+        </div>
+      </div>
+    </section>
+    <section class="wrap section">
+      <div class="section-head"><p class="eyebrow">By need</p><h2>Popular ways to start.</h2></div>
+      <div class="need-grid">
+        <button data-template="marketing"><b>Plan a launch</b><span>Checklists, owners and a shared date.</span></button>
+        <button data-template="product"><b>Synthesise research</b><span>Turn interviews into themes and next steps.</span></button>
+        <button data-template="marketing"><b>Run a content calendar</b><span>Ideas to published, week by week.</span></button>
+        <button data-template="creative"><b>Manage client projects</b><span>Briefs, reviews and delivery in one place.</span></button>
+      </div>
+    </section>
+    <section class="cta-band"><div class="wrap"><h2>Not sure where to start?</h2><div class="cta-row"><a class="button cream" href="#/workspace">Explore the demo workspace <span aria-hidden="true">↗</span></a><a class="text-link light" href="#/signup">Create an account</a></div></div></section>
+    <div data-footer></div>
+  </main>
+
+  <!-- ═════════════ PRICING ═════════════ -->
+  <main class="page" id="page-pricing" data-page="pricing" hidden aria-labelledby="pricing-title">
+    <section class="page-hero wrap narrow center">
+      <div class="page-hero-copy">
+        <p class="eyebrow">Pricing</p>
+        <h1 class="page-title" id="pricing-title" tabindex="-1">Simple plans for<br> every season.</h1>
+        <p class="lede">Start free. Upgrade when your garden needs more room.</p>
+        <div class="billing-toggle" role="radiogroup" aria-label="Billing period">
+          <button role="radio" aria-checked="true" data-billing="monthly">Monthly</button>
+          <button role="radio" aria-checked="false" data-billing="yearly">Yearly <i>Save 20%</i></button>
+        </div>
+      </div>
+    </section>
+    <section class="wrap section tight">
+      <div class="plans">
+        <article class="plan">
+          <h2>Seed</h2><p class="plan-for">For personal projects</p>
+          <p class="price"><b>$0</b><span>forever</span></p>
+          <button class="button outline" data-plan="seed">Start free</button>
+          <ul class="checks"><li>1 workspace, 3 projects</li><li>Notes & Knowledge</li><li>Bloom assistant · 20 prompts / month</li><li>Up to 2 members</li></ul>
+        </article>
+        <article class="plan featured">
+          <p class="plan-badge">Most popular</p>
+          <h2>Bloom</h2><p class="plan-for">For small teams</p>
+          <p class="price"><b data-price-monthly="$12" data-price-yearly="$10">$12</b><span>per member / month</span></p>
+          <button class="button green" data-plan="bloom">Choose Bloom</button>
+          <ul class="checks"><li>Unlimited projects</li><li>Shared Knowledge base</li><li>Bloom assistant · 500 prompts / month</li><li>Guests & client portals</li><li>Focus sessions</li></ul>
+        </article>
+        <article class="plan">
+          <h2>Garden</h2><p class="plan-for">For growing organisations</p>
+          <p class="price"><b data-price-monthly="$24" data-price-yearly="$19">$24</b><span>per member / month</span></p>
+          <button class="button outline" data-plan="garden">Choose Garden</button>
+          <ul class="checks"><li>Everything in Bloom</li><li>Unlimited assistant</li><li>SSO & admin controls</li><li>Advanced permissions</li><li>Priority support</li></ul>
+        </article>
+      </div>
+      <p class="fine center">BloomOS is a product concept. Prices are illustrative and no payment is taken in this preview.</p>
+    </section>
+    <section class="wrap section">
+      <div class="section-head"><h2>Compare plans</h2></div>
+      <div class="table-scroll"><table class="compare">
+        <thead><tr><th scope="col">Feature</th><th scope="col">Seed</th><th scope="col">Bloom</th><th scope="col">Garden</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Projects</th><td>3</td><td>Unlimited</td><td>Unlimited</td></tr>
+          <tr><th scope="row">Members</th><td>2</td><td>Unlimited</td><td>Unlimited</td></tr>
+          <tr><th scope="row">Bloom assistant</th><td>20 / mo</td><td>500 / mo</td><td>Unlimited</td></tr>
+          <tr><th scope="row">Knowledge base</th><td>Personal</td><td>Shared</td><td>Shared</td></tr>
+          <tr><th scope="row">Guests & client portals</th><td>—</td><td>✓</td><td>✓</td></tr>
+          <tr><th scope="row">Focus sessions</th><td>—</td><td>✓</td><td>✓</td></tr>
+          <tr><th scope="row">SSO & admin controls</th><td>—</td><td>—</td><td>✓</td></tr>
+          <tr><th scope="row">Support</th><td>Community</td><td>Email</td><td>Priority</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+    <section class="wrap section narrow">
+      <div class="section-head"><h2>Questions</h2></div>
+      <div class="faq">
+        <details><summary>Can I change plans later?</summary><p>Yes. You can move between plans at any time from workspace settings; changes apply to the next billing period.</p></details>
+        <details><summary>What counts as an assistant prompt?</summary><p>Each request you send to the Bloom assistant, such as “summarise these notes”, counts as one prompt.</p></details>
+        <details><summary>Is there a discount for non-profits or education?</summary><p>In a real launch we’d offer one. In this concept preview, every plan is free to explore.</p></details>
+        <details><summary>Do I need a card to start?</summary><p>No. The Seed plan is free, and this preview never asks for payment details.</p></details>
+      </div>
+    </section>
+    <div data-footer></div>
+  </main>
+
+  <!-- ═════════════ LOG IN ═════════════ -->
+  <main class="page auth-page" id="page-login" data-page="login" hidden aria-labelledby="login-title">
+    <aside class="auth-art" aria-hidden="true"><img src="assets/media/bloom-end-v2.webp" alt=""><p>“A little focus.<br>A lot of possibility.”</p></aside>
+    <section class="auth-panel">
+      <form class="auth-form" id="login-form" novalidate>
+        <h1 class="page-title small" id="login-title" tabindex="-1">Welcome back.</h1>
+        <p class="lede">Log in to your workspace.</p>
+        <label class="field"><span>Email</span><input type="email" name="email" autocomplete="email" required placeholder="you@example.com"><em class="field-error" aria-live="polite"></em></label>
+        <label class="field"><span>Password</span><span class="pw-wrap"><input type="password" name="password" autocomplete="current-password" required minlength="6" placeholder="At least 6 characters"><button type="button" class="pw-toggle" aria-label="Show password">Show</button></span><em class="field-error" aria-live="polite"></em></label>
+        <div class="form-row"><label class="check"><input type="checkbox" name="remember" checked> Remember me</label><button type="button" class="text-link" id="forgot-link">Forgot password?</button></div>
+        <button class="button green block" type="submit">Log in</button>
+        <p class="form-note" id="login-note" role="status"></p>
+        <div class="divider"><span>or</span></div>
+        <a class="button outline block" href="#/workspace" data-guest>Explore as a guest</a>
+        <p class="switch">New to BloomOS? <a href="#/signup">Create an account</a></p>
+        <p class="fine">Demo only: any email and a 6+ character password will sign you in. Nothing leaves your browser.</p>
+      </form>
+      <form class="auth-form" id="reset-form" hidden novalidate>
+        <h1 class="page-title small" tabindex="-1">Reset password</h1>
+        <p class="lede">Enter your email and we’d send you a reset link.</p>
+        <label class="field"><span>Email</span><input type="email" name="email" autocomplete="email" required placeholder="you@example.com"><em class="field-error" aria-live="polite"></em></label>
+        <button class="button green block" type="submit">Send reset link</button>
+        <p class="form-note" role="status"></p>
+        <p class="switch"><button type="button" class="text-link" id="back-to-login">← Back to log in</button></p>
+      </form>
+    </section>
+  </main>
+
+  <!-- ═════════════ SIGN UP + ONBOARDING ═════════════ -->
+  <main class="page auth-page" id="page-signup" data-page="signup" hidden aria-labelledby="signup-title">
+    <aside class="auth-art" aria-hidden="true"><img src="assets/media/bloom-start-v2.webp" alt="" id="signup-art"><p id="signup-art-copy">“Every garden starts<br>with a single seed.”</p></aside>
+    <section class="auth-panel">
+      <form class="auth-form onboarding" id="signup-form" novalidate>
+        <ol class="stepper" aria-label="Sign-up progress"><li class="is-current" aria-current="step"><span>1</span>Account</li><li><span>2</span>About you</li><li><span>3</span>Workspace</li></ol>
+
+        <fieldset class="step" data-step="1">
+          <legend><h1 class="page-title small" id="signup-title" tabindex="-1">Create your account.</h1></legend>
+          <p class="lede">Free to start. <span id="plan-note">Seed plan</span> · <a href="#/pricing">change</a></p>
+          <label class="field"><span>Full name</span><input name="name" autocomplete="name" required maxlength="60" placeholder="Alex Rivera"><em class="field-error" aria-live="polite"></em></label>
+          <label class="field"><span>Work email</span><input type="email" name="email" autocomplete="email" required placeholder="you@example.com"><em class="field-error" aria-live="polite"></em></label>
+          <label class="field"><span>Password</span><span class="pw-wrap"><input type="password" name="password" autocomplete="new-password" required minlength="6" placeholder="At least 6 characters"><button type="button" class="pw-toggle" aria-label="Show password">Show</button></span><span class="strength" aria-hidden="true"><i></i></span><em class="field-error" aria-live="polite"></em></label>
+          <div class="step-actions"><span></span><button class="button green" type="button" data-next>Continue <span aria-hidden="true">→</span></button></div>
+          <p class="switch">Already have an account? <a href="#/login">Log in</a></p>
+        </fieldset>
+
+        <fieldset class="step" data-step="2" hidden>
+          <legend><h2 class="page-title small" tabindex="-1">What will you grow here?</h2></legend>
+          <p class="lede">Pick all that apply. We’ll plant a few starter tasks for you.</p>
+          <div class="choice-grid" role="group" aria-label="Uses">
+            <label class="choice"><input type="checkbox" name="use" value="launch"><span>Product launches</span></label>
+            <label class="choice"><input type="checkbox" name="use" value="client"><span>Client projects</span></label>
+            <label class="choice"><input type="checkbox" name="use" value="content"><span>Content & campaigns</span></label>
+            <label class="choice"><input type="checkbox" name="use" value="research"><span>Research</span></label>
+            <label class="choice"><input type="checkbox" name="use" value="personal"><span>Personal goals</span></label>
+            <label class="choice"><input type="checkbox" name="use" value="company"><span>Running a company</span></label>
+          </div>
+          <p class="field-label">Team size</p>
+          <div class="segmented" role="radiogroup" aria-label="Team size">
+            <label><input type="radio" name="team" value="1" checked><span>Just me</span></label>
+            <label><input type="radio" name="team" value="2-10"><span>2–10</span></label>
+            <label><input type="radio" name="team" value="11-50"><span>11–50</span></label>
+            <label><input type="radio" name="team" value="50+"><span>50+</span></label>
+          </div>
+          <em class="field-error" id="use-error" aria-live="polite"></em>
+          <div class="step-actions"><button class="text-link" type="button" data-back>← Back</button><button class="button green" type="button" data-next>Continue <span aria-hidden="true">→</span></button></div>
+        </fieldset>
+
+        <fieldset class="step" data-step="3" hidden>
+          <legend><h2 class="page-title small" tabindex="-1">Name your workspace.</h2></legend>
+          <p class="lede">You can change this any time.</p>
+          <label class="field"><span>Workspace name</span><input name="workspace" required maxlength="40" placeholder="Alex’s garden"><em class="field-error" aria-live="polite"></em></label>
+          <p class="field-label">Accent flower</p>
+          <div class="swatches" role="radiogroup" aria-label="Accent colour">
+            <label><input type="radio" name="accent" value="peach" checked><span style="--sw:#f1b48f"></span>Peach</label>
+            <label><input type="radio" name="accent" value="sage"><span style="--sw:#a9bf92"></span>Sage</label>
+            <label><input type="radio" name="accent" value="butter"><span style="--sw:#f0cf73"></span>Butter</label>
+            <label><input type="radio" name="accent" value="rose"><span style="--sw:#e7a3a8"></span>Rose</label>
+          </div>
+          <div class="ws-preview" id="ws-preview" aria-hidden="true"><span class="ws-badge">✿</span><div><b id="ws-preview-name">Alex’s garden</b><small id="ws-preview-meta">Seed plan · Just me</small></div></div>
+          <div class="step-actions"><button class="text-link" type="button" data-back>← Back</button><button class="button green" type="submit">Create workspace <span aria-hidden="true">↗</span></button></div>
+        </fieldset>
+
+        <div class="planting" id="planting" hidden role="status"><span class="planting-flower" aria-hidden="true">✿</span><p>Planting your workspace…</p></div>
+      </form>
+    </section>
+  </main>
+
+  <!-- ═════════════ WORKSPACE (app) ═════════════ -->
+  <main class="page app-page" id="page-workspace" data-page="workspace" hidden aria-labelledby="workspace-title">
+    <div class="app-topbar">
+      <a class="app-brand" href="#/"><span class="flower-mark" aria-hidden="true">✿</span> <span id="app-ws-name">BloomOS Workspace</span></a>
+      <span class="demo-badge" id="app-mode-badge">Interactive demo</span>
+      <div class="app-top-actions">
+        <a class="text-link" href="#/">Back to site</a>
+        <div class="user-menu"><button class="avatar" id="user-button" aria-haspopup="true" aria-expanded="false" aria-controls="user-pop">B</button>
+          <div class="user-pop" id="user-pop" hidden><p><b id="user-name">Guest</b><small id="user-email">Exploring the demo</small></p><a href="#/pricing" id="user-plan">Seed plan · Upgrade</a><button id="reset-demo">Reset demo data</button><button id="sign-out">Sign out</button></div>
+        </div>
+      </div>
+    </div>
+    <p class="guest-banner" id="guest-banner">You’re exploring as a guest. <a href="#/signup">Create an account</a> to name your workspace and keep your setup.</p>
+    <div class="workspace-shell"><aside class="workspace-sidebar"><div class="flower-mark">✿</div><button data-view="home">⌂ <span>Home</span></button><button class="selected" data-view="projects">▣ <span>Projects</span></button><button data-view="knowledge">▤ <span>Knowledge</span></button><button data-view="agents">✧ <span>Agents</span></button><span class="sidebar-foot">A little room to grow.</span></aside>
+      <section class="workspace-main"><div class="workspace-toolbar"><label class="search"><span aria-hidden="true">⌕</span><input id="task-search" placeholder="Search your projects…" aria-label="Search tasks"></label></div><h2 id="workspace-title" tabindex="-1">A little focus.<br class="mobile-only"> A lot of possibility.</h2><div class="board-header"><h3 id="view-title">Spring launch <span>⌄</span></h3><button class="button green" id="new-task">+ New</button></div><form id="task-form" class="task-form" hidden><input id="task-title" aria-label="New task title" placeholder="What would you like to grow?" maxlength="100" required><button class="button green" type="submit">Add task</button></form><div class="board" id="board"><section><h4><i class="yellow-dot"></i>In progress <span id="progress-count">2</span></h4><div id="progress-tasks"></div></section><section><h4><i class="sage-dot"></i>Ready to bloom <span id="done-count">1</span></h4><div id="done-tasks"></div></section></div><div class="empty-search" id="empty-search" hidden>No tasks found. Try another search.</div><div class="alternative-view" id="alternative-view" hidden></div><form class="assistant" id="assistant-form"><label for="assistant-input">✧ &nbsp;Bloom assistant <span>Demo</span></label><div><input id="assistant-input" placeholder="Turn these ideas into a launch plan…" maxlength="300" required><button type="submit" aria-label="Create a sample plan">↗</button></div><p id="assistant-reply" role="status" hidden></p></form></section>
+    </div>
+  </main>
+
+  <template id="site-footer-tpl">
+    <footer class="site-footer"><div class="wrap footer-grid">
+      <div><a class="wordmark" href="#/">BloomOS</a><p>Make work bloom.</p></div>
+      <nav aria-label="Footer"><p>Product</p><a href="#/product">Overview</a><a href="#/workspace">Live demo</a><a href="#/pricing">Pricing</a></nav>
+      <nav aria-label="Solutions"><p>Solutions</p><a href="#/solutions">Teams</a><a href="#/solutions">Templates</a></nav>
+      <nav aria-label="Account"><p>Account</p><a href="#/login">Log in</a><a href="#/signup">Get started</a></nav>
+    </div><p class="wrap fine">BloomOS is a product concept. No real accounts, payments or AI services are connected; demo data stays in your browser.</p></footer>
+  </template>
+</body>
+</html>
