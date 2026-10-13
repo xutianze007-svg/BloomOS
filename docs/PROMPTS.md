@@ -1,3 +1,5 @@
+> **Current implementation (2026-10-13):** The home hero now uses scroll-driven video seeking, not hover playback. Read `README.md`, `app.js`, and `scene-compositor.js` first. The headline uses live scene-space foreground occlusion, so K becomes complete as it clears the computer. The screen uses a perspective-tracked native HTML/CSS UI with a flower mask. Use `assets/media/bloom-scroll-seek.mp4`; older hover instructions and screenshots below are historical references. Keep the current source behavior when porting.
+
 # Prompts for rebuilding BloomOS in Enter
 
 **Easiest start:** give Enter the repository link https://github.com/xutianze007-svg/BloomOS and say: "Import this repo; it's a finished static site. Read docs/TEMPLATE_SPEC.md, then reply with your React component plan before writing code." After that, skip Step 0 and continue from Step 1, telling it to "use the files in the repo" instead of attaching them.

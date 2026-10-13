@@ -1,52 +1,54 @@
 # BloomOS — Make work bloom
 
-A cinematic SaaS landing-page template. Hover the retro computer in a sunset meadow and it bursts into bloom, spreading in the direction you move; move away and it rewinds, while the vines and flowers grow **in front of** the headline. Behind the hero is a small working site: Product, Solutions, Pricing, Log in, a 3-step sign-up, and a demo workspace.
+Local, dependency-free HTML/CSS/JavaScript landing-page reconstruction.
 
-Plain HTML/CSS/JavaScript with no dependencies or build step.
+## Preview
 
-| Idle | Bloomed |
-|---|---|
-| ![Idle hero](docs/reference/01-hero-start.jpg) | ![Bloomed hero](docs/reference/03-hero-bloomed.jpg) |
+Run `npm run dev` (Node 22+), then open http://127.0.0.1:5173/.
 
-## Run locally
+## Interaction
 
-```bash
-npm run dev        # Node 22+, then open http://127.0.0.1:5173/
-```
-Any static server works. Media must be served from the same origin, because the WebGL occluder reads video pixels.
+The hero is pinned for 220 viewport-heights of scrolling. Scroll down to advance the supplied five-second camera-and-bloom video; scroll up to seek backwards. Hovering has no playback effect. The video remains paused: page scroll position sets its time, with the latest seek queued until the decoder finishes the previous one.
 
-## Highlights
+The opening poster, typography and layout are retained. The headline and supporting copy move upwards and fade out during the first 36% of the scroll. The full K is rendered without a fixed cutout. A WebGL foreground, keyed from the current scene frame, covers only the parts of the headline overlapping the computer and flowers. K becomes complete as it clears the computer. Background and foreground share the same decoded canvas snapshot to prevent edge ghosting. On mobile, the crop follows the computer towards the center.
 
-- **Hover bloom:** hovering the computer plays the bloom (native video) and reveals it as a soft wave in the direction you move; leaving the computer rewinds it smoothly with a pre-reversed copy (`app.js`).
-- **Foreground occlusion:** a WebGL canvas redraws the computer and plants above the `<h1>`, keying out the sky inside a soft mask (`assets/media/occlusion-domain.png`). The tagline and buttons always stay on top.
-- **Site pages:** hash routes `#/product`, `#/solutions`, `#/pricing`, `#/login`, `#/signup`, `#/workspace` (`pages.js`, `pages.css`).
-- **Demo account flow:** plan and template choices carry into sign-up; onboarding sets the workspace name, accent and starter tasks. Everything stays in `localStorage`.
-- Responsive (desktop, tablet, 390 px mobile), keyboard accessible, honours `prefers-reduced-motion`.
+The monitor contains a high-resolution HTML/CSS interface with native text. `scene-compositor.js` maps it to measured inner-glass corner keyframes with a projective transform; the display lights up at 3.06–3.30 seconds. Rounded edges, warm surface shading and subtle scanlines match the CRT. A frame-dependent mask retains bright saturated petals in the lower-left screen border, leaving foreground flowers over the UI. The tracking data is specific to this supplied video and must be recalibrated if the video or camera motion changes.
 
-## Structure
+"Watch demo" smoothly scrolls to the end; "Back to start" returns to the opening. Reduced-motion mode removes the title translation and uses instant control navigation. Touch and keyboard use normal browser scrolling; no wheel or touch events are intercepted.
 
-```
-index.html            markup for the hero and every page
-styles.css            hero, header, base styles
-pages.css             inner pages, auth, workspace, footer
-app.js                hero interaction + WebGL foreground occluder
-icons.js              Lucide icons (ISC), inlined
-pages.js              router, tabs, pricing, log-in, onboarding, workspace
-assets/fonts/         Bodoni Moda + Inter (SIL OFL)
-assets/media/         bloom-start-v2.webp, bloom-end-v2.webp, bloom-forward.mp4, bloom-reverse.mp4, occlusion-domain.png
-docs/TEMPLATE_SPEC.md full rebuild spec + acceptance checklist
-docs/PROMPTS.md       step-by-step prompts for AI builders (e.g. Enter)
-docs/reference/       15 screenshots of every state
-```
+See **Site pages** below.
 
-## Rebuilding in an AI builder (React)
+## Site pages
 
-Point the builder at this repository and start with:
+A hash router (`pages.js`, styles in `pages.css`) turns the landing page into a small site; every route has a shareable URL and the hero remains paused on every route; returning home resets the scroll position.
 
-> Import https://github.com/xutianze007-svg/BloomOS. It's a finished static site. Port it faithfully to React (not a redesign). Read `docs/TEMPLATE_SPEC.md` first; the code at the repo root is the source of truth and `docs/reference/` shows the target result. Keep `assets/` under `/public/assets/` with the same paths. Reply with your component plan before writing code.
+- `#/product`: feature overview with tabbed previews (Projects, Knowledge, Bloom assistant, Focus), how it works, tool categories, CTA.
+- `#/solutions`: team tabs (Creative studios, Product teams, Marketing, Founders) with starter templates; "Use this template" carries the template into sign-up (or straight into the workspace when signed in).
+- `#/pricing`: monthly/yearly toggle, three illustrative plans, comparison table, FAQ. Choosing a plan carries it into sign-up.
+- `#/login`: validated log-in form, password reset state, guest entry.
+- `#/signup`: three-step onboarding (account, what you will grow + team size, workspace name + accent colour) that plants starter tasks and opens the workspace.
+- `#/workspace`: the full-page demo workspace (formerly a dialog) with the signed-in name, workspace name, plan and accent, a user menu (reset demo data, sign out) and a guest banner.
 
-Then follow `docs/PROMPTS.md` step by step.
+Try BloomOS opens the workspace as a guest; Get started opens sign-up; once signed in, the header shows Open workspace. Everything is a local demo: the session, tasks and choices live in browser local storage; no backend, authentication, payment or AI service is connected.
 
-## Notes
+## Assets
 
-BloomOS is a fictional product concept. Prices are illustrative; no real accounts, payments or AI services are connected. Fonts are licensed under the SIL Open Font License (see `assets/fonts/`).
+- `assets/media/bloom-scroll.mp4`: untouched copy of the supplied `video_1791864712492.mp4` (3836×2160, 5.042 seconds).
+- `assets/media/bloom-scroll-seek.mp4`: active 1920×1080 H.264 playback copy, 121 independently seekable frames, approximately 12 MB. Reproduce with `swift tools/prepare-scroll-video.swift assets/media/bloom-scroll.mp4 assets/media/new-scroll-output.mp4`.
+- `assets/media/bloom-start-v2.webp`: retained opening poster.
+- `assets/media/occlusion-domain.png`: foreground domain for live scene-space title occlusion.
+- `assets/media/foreground-before-v2.png`: initial occlusion fallback while WebGL textures load.
+- Earlier video, frame and atlas assets are preserved for reference.
+- `docs/reference/16-scroll-start.png`, `17-scroll-title.png`, `18-scroll-screen.png`: current scroll experience reference screenshots.
+
+## Typography
+
+The reference is an AI-generated bitmap, so the precise original font cannot be determined. Bodoni Moda Black is the closest chosen Didone match, adjusted for width, optical size, line spacing, and reference placement. UI uses Inter. Both are served from local files and included under their SIL Open Font Licenses. Source: https://github.com/google/fonts/tree/main/ofl/bodonimoda and https://github.com/google/fonts/tree/main/ofl/inter.
+
+## Latest verification
+
+Browser checks cover paused hover, forward/reverse scroll seeking, scene-space headline occlusion, tracked clear screen UI, desktop and mobile framing, demo/reset controls, and route return. Run syntax checks with `npm run check` and `node --check pages.js`.
+
+### Archived monitor geometry repair
+
+The previous `assets/media/bloom-growth-repaired.mp4` repairs the source video’s inward L-shaped lower-left screen bezel. `tools/stabilize-monitor.swift` composites a registered imagegen repair plate within x1044–1162, y700–810, with feathered edges, temporal introduction, and screen-light compensation. The small overlapping vine section uses the repair plate; movement elsewhere is retained. Original videos remain intact. Reproduce with `swift tools/stabilize-monitor.swift assets/media/bloom-growth-v2.mp4 assets/media/new-output.mp4 assets/media/monitor-repair-plate.png`.

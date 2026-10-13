@@ -31,7 +31,7 @@ $$('[data-footer]').forEach(el=>el.replaceWith(footerTpl.content.cloneNode(true)
 const pages=Object.fromEntries($$('[data-page]').map(p=>[p.dataset.page,p]));
 const menu=$('#mobile-menu'), menuToggle=$('#menu-toggle');
 const heroVideo=$('#garden-video');
-let route='home', heroWasPlaying=false;
+let route='home';
 function closeMenu(){menu.hidden=true;menuToggle.setAttribute('aria-expanded','false');menuToggle.setAttribute('aria-label','Open navigation');}
 menuToggle.addEventListener('click',()=>{menu.hidden=!menu.hidden;menuToggle.setAttribute('aria-expanded',String(!menu.hidden));menuToggle.setAttribute('aria-label',menu.hidden?'Open navigation':'Close navigation');});
 function parseRoute(){const r=location.hash.replace(/^#\/?/,'').split(/[?/]/)[0];return pages[r]?r:'home';}
@@ -39,9 +39,8 @@ function go(r){if(parseRoute()===r)render();else location.hash='#/'+(r==='home'?
 function render(){
  const next=parseRoute();
  if(next===route&&document.body.dataset.route===next)return;
- // Pause the hero garden when leaving it; resume when coming back.
- if(route==='home'&&next!=='home'&&heroVideo){heroWasPlaying=!heroVideo.paused&&!heroVideo.ended;heroVideo.pause();}
- if(next==='home'&&route!=='home'&&heroVideo&&heroWasPlaying)heroVideo.play().catch(()=>{});
+ // The hero is scroll-driven and always remains paused, including route changes.
+ if(heroVideo)heroVideo.pause();
  route=next;
  for(const [name,el] of Object.entries(pages))el.hidden=name!==next;
  document.body.dataset.route=next;

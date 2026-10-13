@@ -2,6 +2,6 @@
   "name": "bloomos-reveal",
   "version": "1.0.0",
   "private": true,
-  "description": "BloomOS cinematic hover reveal landing page",
-  "scripts": {"dev": "node server.mjs", "start": "node server.mjs", "check": "node --check app.js && node --check server.mjs"}
+  "description": "BloomOS cinematic scroll-driven landing page",
+  "scripts": {"dev": "node server.mjs", "start": "node server.mjs", "check": "node --check app.js && node --check scene-compositor.js && node --check pages.js && node --check server.mjs"}
 }

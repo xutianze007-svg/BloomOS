@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="pages.css">
   <script src="icons.js" defer></script>
   <script src="app.js" defer></script>
+  <script src="scene-compositor.js" defer></script>
   <script src="pages.js" defer></script>
 </head>
 <body data-route="home">
@@ -33,12 +34,14 @@
     <a href="#/product">Product</a><a href="#/solutions">Solutions</a><a href="#/pricing">Pricing</a>
     <a class="guest-only" href="#/login">Log in</a><a class="guest-only" href="#/signup">Get started</a><a class="member-only" href="#/workspace">Open workspace</a>
   </nav>
-  <a class="skip" href="#bloom-trigger">Skip to the blooming computer</a>
+  <a class="skip" href="#watch-demo">Skip to the garden controls</a>
   <main class="hero" id="hero" data-page="home">
+    <div class="hero-stage">
     <div class="scene" id="scene">
       <div class="media-plane" id="media-plane" aria-hidden="true">
         <img class="scene-layer start-frame" src="assets/media/bloom-start-v2.webp" alt="" width="1920" height="1080" fetchpriority="high">
-        <video id="garden-video" class="scene-layer garden-video" src="assets/media/bloom-forward.mp4" muted playsinline preload="auto" disablepictureinpicture></video>
+        <canvas id="video-frame" class="scene-layer" width="1920" height="1080"></canvas>
+        <video id="garden-video" class="scene-layer garden-video" src="assets/media/bloom-scroll-seek.mp4" muted playsinline preload="auto" disablepictureinpicture></video>
       </div>
       <div class="scene-shade" aria-hidden="true"></div>
       <section class="hero-copy" aria-labelledby="hero-title">
@@ -49,19 +52,40 @@
           <button class="demo-link" id="watch-demo">Watch demo <i data-icon="play"></i></button>
         </div>
       </section>
-      <div class="media-plane occluder-plane" aria-hidden="true"><canvas id="occluder" class="scene-layer occluder" width="1920" height="1080"></canvas></div>
-      <button class="bloom-trigger" id="bloom-trigger" aria-label="Wake the whole blooming garden." aria-describedby="bloom-status">
-        <span class="sr-only">Let it bloom</span>
-      </button>
+      <div class="media-plane screen-plane" aria-hidden="true">
+        <div id="screen-ui" class="screen-ui">
+          <div class="screen-chrome"><span>⌂ &nbsp; BloomOS Workspace</span><span>＋ &nbsp; ◇ &nbsp; ×</span></div>
+          <div class="screen-shell">
+            <aside class="screen-sidebar"><div class="screen-logo">✿</div><div>⌂ &nbsp; Home</div><div class="selected">▣ &nbsp; Projects</div><div>▤ &nbsp; Knowledge</div><div>♧ &nbsp; Agents</div><small>Your ideas, in season.</small></aside>
+            <div class="screen-main">
+              <div class="screen-toolbar"><div class="screen-search">⌕ &nbsp; Search projects, files, or ask anything…</div><div class="screen-avatars"><b>JL</b><b>AM</b><b>SK</b></div></div>
+              <h2>A little focus. A lot of possibility.</h2>
+              <div class="screen-board-title"><strong>Spring launch⌄</strong><span>＋ New</span></div>
+              <div class="screen-board">
+                <div><div class="screen-column-label"><i></i> In progress <small>2</small></div>
+                  <article class="screen-card"><div class="screen-card-top"><div class="screen-thumb flower"><img src="assets/media/meadow-flower.png" alt=""></div><div><h3>Brand direction <span>···</span></h3><em>Design</em><p>Give our next chapter<br>a fresh perspective.</p></div></div><div class="screen-card-foot"><span class="screen-people">JL &nbsp; AM &nbsp; SK</span><meter min="0" max="5" value="3"></meter><small>3/5</small></div></article>
+                  <article class="screen-card"><div class="screen-card-top"><div class="screen-thumb landscape"></div><div><h3>Launch story <span>···</span></h3><p>A campaign that celebrates<br>creativity in everyday work.</p><em class="draft">Draft</em></div></div><div class="screen-card-foot"><span>Due Friday</span><meter min="0" max="4" value="1"></meter><small>1/4</small></div></article>
+                </div>
+                <div><div class="screen-column-label ready"><i></i> Ready to bloom <small>2</small></div>
+                  <article class="screen-card"><div class="screen-card-top"><b class="screen-check">✓</b><div><h3>Research brief <span>···</span></h3><p>Customer insights, key themes,<br>and opportunity areas.</p><ul><li>✓ &nbsp; Interview synthesis</li><li>✓ &nbsp; Key themes</li><li>✓ &nbsp; Opportunity map</li></ul></div></div></article>
+                  <article class="screen-card"><div class="screen-card-top"><div class="screen-thumb twig">♧</div><div><h3>Go-to-market plan <span>···</span></h3><p>Channels, messaging,<br>and rollout plan.</p><em class="planning">Planning</em></div></div><div class="screen-card-foot"><span>Next up</span><meter min="0" max="3" value="0"></meter><small>0/3</small></div></article>
+                </div>
+              </div>
+              <div class="screen-assistant"><b>✣ &nbsp; Bloom assistant</b><div>Turn these ideas into a launch plan…<span>↗</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="media-plane occluder-plane" aria-hidden="true"><canvas id="occluder" class="scene-layer" width="1920" height="1080"></canvas><img class="scene-layer dormant-occlusion occlusion-fallback" src="assets/media/bloom-start-v2.webp" alt=""></div>
       <div class="hover-hint" aria-hidden="true">
-        <span class="hint-desktop">Move your cursor.<br>Let it bloom.</span>
-        <span class="hint-mobile">Touch to<br>discover.</span>
+        <span class="hint-desktop">Scroll to grow.<br>Let it bloom.</span>
+        <span class="hint-mobile">Scroll to<br>grow.</span>
         <svg viewBox="0 0 100 65" fill="none"><path d="M91 3C77 28 45 49 9 56" stroke="currentColor" stroke-width="1"/><circle cx="9" cy="56" r="2.5" fill="currentColor"/></svg>
       </div>
     </div>
-    <div class="bloom-cursor" id="bloom-cursor" aria-hidden="true"></div>
-    <footer class="hero-footer"><p class="signature"><span></span>Built for human possibility</p><button id="replay" class="replay" aria-label="Reset the garden to its sleeping state"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 7a6.5 6.5 0 1 1-.2 5M4 7V2M4 7h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Reset garden</span></button></footer>
-    <p id="bloom-status" class="sr-only" role="status">Move over the scene to reveal the blooming workspace, or focus the computer and press Enter.</p>
+    <footer class="hero-footer"><p class="signature"><span></span>Built for human possibility</p><button id="replay" class="replay" aria-label="Scroll back to the sleeping garden"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 7a6.5 6.5 0 1 1-.2 5M4 7V2M4 7h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Back to start</span></button></footer>
+    <p id="bloom-status" class="sr-only" role="status">Scroll down to grow the garden. Scroll up to return to the start.</p>
+    </div>
   </main>
   <!-- ═════════════ PRODUCT ═════════════ -->
   <main class="page" id="page-product" data-page="product" hidden aria-labelledby="product-title">

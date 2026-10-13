@@ -1,3 +1,5 @@
+> **Current implementation (2026-10-13):** The home hero now uses scroll-driven video seeking, not hover playback. Read `README.md`, `app.js`, and `scene-compositor.js` first. The headline uses live scene-space foreground occlusion, so K becomes complete as it clears the computer. The screen uses a perspective-tracked native HTML/CSS UI with a flower mask. Use `assets/media/bloom-scroll-seek.mp4`; older hover instructions and screenshots below are historical references. Keep the current source behavior when porting.
+
 # BloomOS — Template Spec for Enter
 
 > **Purpose:** rebuild the BloomOS landing site as an Enter template, matching the current reference build pixel-for-pixel and behaviour-for-behaviour.
