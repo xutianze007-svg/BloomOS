@@ -14,6 +14,10 @@ The opening poster, typography and layout are retained. The headline and support
 
 The monitor contains a high-resolution HTML/CSS interface with native text. `scene-compositor.js` maps it to measured inner-glass corner keyframes with a projective transform; the display lights up at 3.06–3.30 seconds. Rounded edges, warm surface shading and subtle scanlines match the CRT. A frame-dependent mask retains bright saturated petals in the lower-left screen border, leaving foreground flowers over the UI. The tracking data is specific to this supplied video and must be recalibrated if the video or camera motion changes.
 
+At the decoded final frame, the original monitor UI becomes interactive in place. `screen-interactions.js` enhances the existing markup without replacing the screen or navigating to `#/workspace`. Projects supports search, task creation, editing, and completion. Home includes live progress statistics and recent-task shortcuts. Knowledge provides category filters, editable notes, and explicit local saves. Agents offers three assistant profiles, suggested prompts, and scripted sample responses. Content scrolls within the glass; returning to the animation disables screen controls. Monitor tasks and notes use their own local-storage keys, separate from the full-page workspace demo.
+
+Headline, tagline, and controls animate as separate layers. The computer and flowers can overlap the title while the tagline and primary button remain above the foreground at every viewport size.
+
 "Watch demo" smoothly scrolls to the end; "Back to start" returns to the opening. Reduced-motion mode removes the title translation and uses instant control navigation. Touch and keyboard use normal browser scrolling; no wheel or touch events are intercepted.
 
 See **Site pages** below.
@@ -39,7 +43,7 @@ Try BloomOS opens the workspace as a guest; Get started opens sign-up; once sign
 - `assets/media/occlusion-domain.png`: foreground domain for live scene-space title occlusion.
 - `assets/media/foreground-before-v2.png`: initial occlusion fallback while WebGL textures load.
 - Earlier video, frame and atlas assets are preserved for reference.
-- `docs/reference/16-scroll-start.png`, `17-scroll-title.png`, `18-scroll-screen.png`: current scroll experience reference screenshots.
+- `output/backup-before-scroll-video/`: previous source and initial screenshot.
 
 ## Typography
 
@@ -47,7 +51,7 @@ The reference is an AI-generated bitmap, so the precise original font cannot be 
 
 ## Latest verification
 
-Browser checks cover paused hover, forward/reverse scroll seeking, scene-space headline occlusion, tracked clear screen UI, desktop and mobile framing, demo/reset controls, and route return. Run syntax checks with `npm run check` and `node --check pages.js`.
+Latest checks cover in-monitor task editing and saving, search, Home/Knowledge/Agents switching, note filtering and saving, assistant prompt selection and sample replies, preserved home URL, and primary-control stacking. `npm run check` includes the screen interaction script. Earlier browser checks cover paused hover, forward/reverse scroll seeking, scene-space headline occlusion, tracked clear screen UI, desktop and mobile framing, demo/reset controls, and route return. Run syntax checks with `npm run check` and `node --check pages.js`.
 
 ### Archived monitor geometry repair
 

@@ -9,6 +9,19 @@
   const foregroundPlane = document.querySelector('.occluder-plane');
   const canvas = document.querySelector('#occluder');
   const screen = document.querySelector('#screen-ui');
+  const screenPlane = screen.parentElement;
+  screenPlane.inert = true;
+  function updateInteraction() {
+    // Enable the original screen controls only when the final frame is decoded.
+    const active = document.body.dataset.route === 'home' && scrollProgress >= .995 &&
+      currentSource === video && hasFrame && frameTime >= video.duration - .09;
+    if (!active && screenPlane.contains(document.activeElement)) {
+      document.activeElement.blur();
+    }
+    screenPlane.inert = !active;
+    screenPlane.setAttribute('aria-hidden', String(!active));
+    screen.classList.toggle('is-interactive', active);
+  }
   const clamp = n => Math.max(0, Math.min(1, n));
   const smooth = (a,b,n) => {const t=clamp((n-a)/(b-a));return t*t*(3-2*t);};
   const ready = image => image.complete && image.naturalWidth ? Promise.resolve() : new Promise(resolve => image.addEventListener('load',resolve,{once:true}));
@@ -127,6 +140,7 @@
     drawForeground();
     const q=corners(frameTime);
     positionScreen(q);
+    updateInteraction();
     if(source===video&&frameTime>=3.06&&renderedTime!==frameTime){flowerMask(q);renderedTime=frameTime;}
   }
   video.addEventListener('seeked',()=>{

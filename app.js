@@ -28,8 +28,12 @@ function renderScroll() {
   progress = clamp(-hero.getBoundingClientRect().top / scrollRange());
   const travel = smooth(0, .43, progress);
   copyShift = motion.matches ? 0 : -stage.clientHeight * .38 * travel;
-  copy.style.transform = `translate3d(0,${copyShift}px,0)`;
-  copy.style.opacity = String(1 - smooth(.035, .36, progress));
+  // Animate each layer independently so controls can stay above the foreground.
+  // Individual translate preserves the headline's existing horizontal scale.
+  for (const layer of copy.children) {
+    layer.style.translate = `0 ${copyShift}px`;
+    layer.style.opacity = String(1 - smooth(.035, .36, progress));
+  }
   copy.inert = progress >= .36;
   hero.classList.toggle('has-scrolled', progress > .015);
   hero.classList.toggle('is-bloomed', progress >= .995);
@@ -42,7 +46,7 @@ function renderScroll() {
   // The narrow-screen crop follows the camera as the computer moves to center.
   video.style.transform = innerWidth <= 700 ? `translate3d(${progress * 13}%,0,0)` : '';
   window.BloomScene?.render(decoded && progress > .001 ? video : firstFrame, progress);
-  status.textContent = progress >= .995 ? 'The garden is in full bloom. Scroll back to return to the start.' : 'Scroll down to grow the garden. Scroll up to return to the start.';
+  status.textContent = progress >= .995 ? 'The garden is in full bloom. Use the controls on the computer screen, or scroll back to return to the start.' : 'Scroll down to grow the garden. Scroll up to return to the start.';
 }
 function scheduleScroll() { if (!drawing) drawing = requestAnimationFrame(renderScroll); }
 window.addEventListener('scroll', scheduleScroll, {passive: true});
